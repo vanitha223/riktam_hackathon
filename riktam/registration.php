@@ -69,7 +69,7 @@ return true;
 	<div class="row">
 			<div class="main-login col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-md-4 col-md-offset-4">
 				<div class="logo margin-top-30">
-				<h2>Smart Chair | User Registration</h2>
+				<h2>Civic Issue | User Registration</h2>
 				</div>
 				<!-- start: REGISTER BOX -->
 				<div class="box-register">
