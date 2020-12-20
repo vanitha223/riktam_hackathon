@@ -1,29 +1,33 @@
 <?php
 session_start();
-//error_reporting(0);
+error_reporting(0);
 include("include/config.php");
-// Code for updating Password
-if(isset($_POST['change']))
-{
-$name=$_SESSION['name'];
-$email=$_SESSION['email'];
-$newpassword=md5($_POST['password']);
-$query=mysqli_query($con,"update users set password='$newpassword' where fullName='$name' and email='$email'");
-if ($query) {
-echo "<script>alert('Password successfully updated.');</script>";
-echo "<script>window.location.href ='user-login.php'</script>";
-}
+//Checking Details for reset password
+if(isset($_POST['submit'])){
+$name=$_POST['fullname'];
+$email=$_POST['email'];
+$query=mysqli_query($con,"select id from  users where fullName='$name' and email='$email'");
+$row=mysqli_num_rows($query);
+if($row>0){
+
+$_SESSION['name']=$name;
+$_SESSION['email']=$email;
+header('location:reset-password.php');
+} else {
+echo "<script>alert('Invalid details. Please try with valid details');</script>";
+echo "<script>window.location.href ='forgot-password.php'</script>";
+
 
 }
 
-
+}
 ?>
 
 
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<title>Password Reset</title>
+		<title>User  Password Recovery</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
 		<meta name="apple-mobile-web-app-capable" content="yes">
@@ -40,56 +44,42 @@ echo "<script>window.location.href ='user-login.php'</script>";
 		<link rel="stylesheet" href="assets/css/styles.css">
 		<link rel="stylesheet" href="assets/css/plugins.css">
 		<link rel="stylesheet" href="assets/css/themes/theme-1.css" id="skin_color" />
-
-				<script type="text/javascript">
-function valid()
-{
- if(document.passwordreset.password.value!= document.passwordreset.password_again.value)
-{
-alert("Password and Confirm Password Field do not match  !!");
-document.passwordreset.password_again.focus();
-return false;
-}
-return true;
-}
-</script>
 	</head>
 	<body class="login">
 		<div class="row">
 			<div class="main-login col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-md-4 col-md-offset-4">
 				<div class="logo margin-top-30">
-				<a href="../index.html"><h2> Civic Issue | User Reset Password</h2></a>
+				<a href="../index.html"><h2>Civic Issue | User Password Recovery</h2></a>
 				</div>
 
 				<div class="box-login">
-					<form class="form-login" name="passwordreset" method="post" onSubmit="return valid();">
+					<form class="form-login" method="post">
 						<fieldset>
 							<legend>
-								User Reset Password
+								User Password Recovery
 							</legend>
 							<p>
-								Please set your new password.<br />
-								<span style="color:red;"><?php echo $_SESSION['errmsg']; ?><?php echo $_SESSION['errmsg']="";?></span>
+								Please enter your Email and password to recover your password.<br />
+					
 							</p>
 
-<div class="form-group">
-<span class="input-icon">
-<input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
-<i class="fa fa-lock"></i> </span>
-</div>
-	
+							<div class="form-group form-actions">
+								<span class="input-icon">
+									<input type="text" class="form-control" name="fullname" placeholder="Registred Full Name">
+									<i class="fa fa-lock"></i>
+									 </span>
+							</div>
 
-<div class="form-group">
-<span class="input-icon">
-<input type="password" class="form-control"  id="password_again" name="password_again" placeholder="Password Again" required>
-<i class="fa fa-lock"></i> </span>
-</div>
-							
+							<div class="form-group">
+								<span class="input-icon">
+									<input type="email" class="form-control" name="email" placeholder="Registred Email">
+									<i class="fa fa-user"></i> </span>
+							</div>
 
 							<div class="form-actions">
 								
-								<button type="submit" class="btn btn-primary pull-right" name="change">
-									Change <i class="fa fa-arrow-circle-right"></i>
+								<button type="submit" class="btn btn-primary pull-right" name="submit">
+									Reset <i class="fa fa-arrow-circle-right"></i>
 								</button>
 							</div>
 							<div class="new-account">
@@ -100,7 +90,6 @@ return true;
 							</div>
 						</fieldset>
 					</form>
-
 				</div>
 
 			</div>
